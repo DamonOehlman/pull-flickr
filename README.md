@@ -31,7 +31,6 @@ through in combination with the `flickr.url` function:
 ```js
 var pull = require('pull-stream');
 var flickr = require('pull-flickr')({ api_key: 'ca43d47b18b91ff639c9628f9cf828cd' });
-var extend = require('cog/extend');
 
 pull(
   flickr.search('water buffalo', { is_commons: true }),
