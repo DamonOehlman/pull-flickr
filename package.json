@@ -23,9 +23,9 @@
   "homepage": "https://github.com/DamonOehlman/pull-flickr",
   "dependencies": {
     "cog": "~0.5",
-    "hyperquest": "~0.3",
     "pull-core": "^1",
-    "concat-stream": "^1"
+    "concat-stream": "^1",
+    "formatter": "~0.4"
   },
   "devDependencies": {
     "pull-stream": "^2"
