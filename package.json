@@ -4,6 +4,7 @@
   "description": "Consume the flickr API (search at this stage) with pull-streams",
   "main": "index.js",
   "scripts": {
+    "gendocs": "gendocs > README.md",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
