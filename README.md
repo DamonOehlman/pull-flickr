@@ -8,6 +8,9 @@ Consume the flickr API (search at this stage) with pull-streams
 
 ## Example Usage
 
+Displayed below is a simple example that looks for "water buffalo" in the
+creative commons collection from flickr.
+
 ```js
 var pull = require('pull-stream');
 var flickr = require('pull-flickr')({ api_key: 'ca43d47b18b91ff639c9628f9cf828cd' });
@@ -21,6 +24,30 @@ pull(
 );
 
 ```
+
+To convert the item data into image urls, you can use a `pull.map`
+through in combination with the `flickr.url` function:
+
+```js
+var pull = require('pull-stream');
+var flickr = require('pull-flickr')({ api_key: 'ca43d47b18b91ff639c9628f9cf828cd' });
+var extend = require('cog/extend');
+
+pull(
+  flickr.search('water buffalo', { is_commons: true }),
+  pull.map(flickr.url('small square')),
+  pull.log()
+);
+
+```
+
+## Specifying API Options
+
+While I normally prefer options that use mixed case identifiers, this module
+uses the underscore separated identifiers that are documented in the
+[Flickr Search API](https://www.flickr.com/services/api/).  This means that
+any of the options that are passed through as query string parameters can be
+used in this module.
 
 ## License(s)
 
