@@ -1,6 +1,6 @@
 {
   "name": "pull-flickr",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Consume the flickr API (search at this stage) with pull-streams",
   "main": "index.js",
   "scripts": {
