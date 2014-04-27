@@ -1,0 +1,32 @@
+{
+  "name": "pull-flickr",
+  "version": "0.0.0",
+  "description": "Consume the flickr API (search at this stage) with pull-streams",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DamonOehlman/pull-flickr.git"
+  },
+  "keywords": [
+    "pull-stream",
+    "flickr"
+  ],
+  "author": "Damon Oehlman <damon.oehlman@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DamonOehlman/pull-flickr/issues"
+  },
+  "homepage": "https://github.com/DamonOehlman/pull-flickr",
+  "dependencies": {
+    "cog": "~0.5",
+    "hyperquest": "~0.3",
+    "pull-core": "^1",
+    "concat-stream": "^1"
+  },
+  "devDependencies": {
+    "pull-stream": "^2"
+  }
+}
