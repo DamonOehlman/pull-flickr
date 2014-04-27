@@ -1,10 +1,6 @@
-var concat = require('concat-stream');
-var config = require('./config');
 var pull = require('pull-core');
 var extend = require('cog/extend');
-var jsonparse = require('cog/jsonparse');
-var request = require('hyperquest');
-var qs = require('querystring');
+var get = require('./lib/get');
 
 module.exports = function(baseOpts) {
 
@@ -22,14 +18,9 @@ module.exports = function(baseOpts) {
     var page = 1;
 
     function getMoreResults(cb) {
-      var writer = concat({ encoding: 'string' }, function(data) {
-        var ok;
-
-        // attempt to parse to json
-        data = jsonparse(data);
-
+      get(extend({ page: page }, opts), function(err, data) {
         // check if the results is ok
-        ok = data && data.stat === 'ok' &&
+        var ok = data && data.stat === 'ok' &&
           data.photos && data.photos.photo &&
           data.photos.photo.length > 0;
 
@@ -44,8 +35,6 @@ module.exports = function(baseOpts) {
         // now try and provide the result
         next(null, cb);
       });
-
-      request(config.baseUrl + qs.stringify(extend({ page: page }, opts))).pipe(writer);
 
       // increase the page number
       page += 1;
