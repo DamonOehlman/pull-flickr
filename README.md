@@ -1,3 +1,4 @@
+
 # pull-flickr
 
 Consume the flickr API (search at this stage) with pull-streams
@@ -5,6 +6,7 @@ Consume the flickr API (search at this stage) with pull-streams
 
 [![NPM](https://nodei.co/npm/pull-flickr.png)](https://nodei.co/npm/pull-flickr/)
 
+[![bitHound Score](https://www.bithound.io/github/DamonOehlman/pull-flickr/badges/score.svg)](https://www.bithound.io/github/DamonOehlman/pull-flickr) 
 
 ## Example Usage
 
@@ -12,8 +14,8 @@ Displayed below is a simple example that looks for "water buffalo" in the
 creative commons collection from flickr.
 
 ```js
-var pull = require('pull-stream');
-var flickr = require('pull-flickr')({ api_key: 'ca43d47b18b91ff639c9628f9cf828cd' });
+const pull = require('pull-stream');
+const flickr = require('pull-flickr')({ api_key: 'ca43d47b18b91ff639c9628f9cf828cd' });
 
 // search for water buffalo and output the results to the console
 // NOTE: because this is using a pull.log (which uses a pull.drain) all
@@ -29,12 +31,12 @@ To convert the item data into image urls, you can use a `pull.map`
 through in combination with the `flickr.url` function:
 
 ```js
-var pull = require('pull-stream');
-var flickr = require('pull-flickr')({ api_key: 'ca43d47b18b91ff639c9628f9cf828cd' });
+const pull = require('pull-stream');
+const { search, url } = require('pull-flickr')({ api_key: 'ca43d47b18b91ff639c9628f9cf828cd' });
 
 pull(
-  flickr.search('water buffalo', { is_commons: true }),
-  pull.map(flickr.url('small square')),
+  search('water buffalo', { is_commons: true }),
+  pull.map(result => url('small square', result)),
   pull.log()
 );
 
@@ -52,7 +54,7 @@ used in this module.
 
 ### ISC
 
-Copyright (c) 2014, Damon Oehlman <damon.oehlman@gmail.com>
+Copyright (c) 2017, Damon Oehlman <damon.oehlman@gmail.com>
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
