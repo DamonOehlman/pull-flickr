@@ -1,70 +1,66 @@
-var pull = require('pull-core');
-var extend = require('cog/extend');
-var get = require('./lib/get');
+const { pull } = require('pull-stream');
+const extend = require('cog/extend');
+const get = require('./lib/get');
 
 module.exports = function(baseOpts) {
-
-  return pull.Source(function(text, searchOpts) {
+  return (text, searchOpts) => {
     // get our search operation opts
-    var opts = extend({}, baseOpts, searchOpts, {
+    const opts = extend({}, baseOpts, searchOpts, {
       method: 'flickr.photos.search',
       nojsoncallback: 1,
       text: text,
       format: 'json'
     });
 
-    var queuedResults = [];
-    var endOfResults = false;
-    var page = 1;
+    let queuedResults = [];
+    let endOfResults = false;
+    let page = 1;
 
-    function getMoreResults(cb) {
-      get(extend({ page: page }, opts), function(err, data) {
+    return (end, callback) => {
+      if (end) {
+        return callback(end);
+      }
+
+      if (sendNextResult(callback)) {
+        return;
+      }
+
+      getMoreResults(callback);
+    }
+
+    function sendNextResult(callback) {
+      if (queuedResults.length > 0) {
+        callback(false, queuedResults.shift());
+        return true;
+      }
+
+      if (endOfResults) {
+        callback(false);
+      }
+
+      return false;
+    }
+
+    function getMoreResults(callback) {
+      get(extend({ page: page }, opts), (err, data) => {
+        if (err) {
+          return callback(err);
+        }
+
         // check if the results is ok
-        var ok = data && data.stat === 'ok' &&
-          data.photos && data.photos.photo &&
-          data.photos.photo.length > 0;
+        const ok = data && data.stat === 'ok'
+          && data.photos && data.photos.photo
+          && data.photos.photo.length > 0;
 
         // if not ok, then end the stream
-        if (! ok) {
-          return cb(true);
+        if (!ok) {
+          return callback(true);
         }
 
-        // add to the queued results
+        page += 1;
         queuedResults = queuedResults.concat(data.photos.photo);
-
-        // now try and provide the result
-        next(null, cb);
+        sendNextResult(callback);
       });
-
-      // increase the page number
-      page += 1;
     }
-
-    function next(end, cb) {
-      var nextResult;
-
-      // if we are at the end, then abort immediately
-      if (end) {
-        return cb(end);
-      }
-
-      // get the next result
-      nextResult = queuedResults.shift();
-
-      if (! nextResult) {
-        // if we are at the end of results, flag that we are at the end
-        if (endOfResults) {
-          return cb(true);
-        }
-
-        // otherwise, get more results
-        return getMoreResults(cb);
-      }
-
-      // supply the next result
-      cb(null, nextResult);
-    }
-
-    return next;
-  });
+  };
 };

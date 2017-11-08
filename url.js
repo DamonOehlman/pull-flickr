@@ -1,5 +1,5 @@
-var formatter = require('formatter');
-var suffixes = {
+const formatter = require('formatter');
+const suffixes = {
   'small square': 's',
   'large square': 'q',
   'thumbnail': 't',
@@ -15,13 +15,9 @@ var suffixes = {
 };
 
 module.exports = function(type, item) {
-  var suffix = suffixes[type] || '';
-  var urlstr = 'http://farm{{ farm }}.staticflickr.com/{{ server }}/{{ id }}_{{ secret }}';
-  var imageurl = formatter(urlstr + (suffix ? '_' + suffix : '') + '.jpg');
+  const suffix = suffixes[type] || '';
+  const urlstr = 'http://farm{{ farm }}.staticflickr.com/{{ server }}/{{ id }}_{{ secret }}';
+  const imageurl = formatter(urlstr + (suffix ? '_' + suffix : '') + '.jpg');
 
-  function genurl(item) {
-    return imageurl(item);
-  }
-
-  return item ? genurl(item) : genurl;
+  return imageurl(item);
 }
